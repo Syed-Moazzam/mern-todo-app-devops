@@ -31,7 +31,7 @@ jobs:
         id: meta-backend
         uses: docker/metadata-action@v4
         with:
-          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}/backend
+          images: ${{ env.REGISTRY }}/${{ github.actor }}/backend
           tags: |
             type=sha,prefix={{branch}}-
             type=raw,value=latest
@@ -48,7 +48,7 @@ jobs:
         id: meta-frontend
         uses: docker/metadata-action@v4
         with:
-          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}/frontend
+          images: ${{ env.REGISTRY }}/${{ github.actor }}/frontend
           tags: |
             type=sha,prefix={{branch}}-
             type=raw,value=latest
