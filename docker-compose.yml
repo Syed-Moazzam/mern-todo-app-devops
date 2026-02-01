@@ -11,7 +11,7 @@ services:
       - todo-network
 
   backend:
-    image: ghcr.io/Syed-Moazzam/mern-todo-app-devops/backend:latest
+    image: ghcr.io/syed-moazzam/mern-todo-app-devops/backend:latest
     container_name: todo-backend
     restart: unless-stopped
     ports:
@@ -25,7 +25,7 @@ services:
       - todo-network
 
   frontend:
-    image: ghcr.io/Syed-Moazzam/mern-todo-app-devops/frontend:latest
+    image: ghcr.io/syed-moazzam/mern-todo-app-devops/frontend:latest
     container_name: todo-frontend
     restart: unless-stopped
     ports:
