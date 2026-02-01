@@ -2,16 +2,18 @@ services:
   mongo:
     image: mongo:latest
     container_name: todo-mongo
+    restart: unless-stopped
     ports:
       - "27017:27017"
     volumes:
       - mongo-data:/data/db
     networks:
-      - todo-app-network
+      - todo-network
 
   backend:
     image: ghcr.io/Syed-Moazzam/mern-todo-app-devops/backend:latest
     container_name: todo-backend
+    restart: unless-stopped
     ports:
       - "5000:5000"
     environment:
@@ -20,11 +22,12 @@ services:
     depends_on:
       - mongo
     networks:
-      - todo-app-network
+      - todo-network
 
   frontend:
     image: ghcr.io/Syed-Moazzam/mern-todo-app-devops/frontend:latest
     container_name: todo-frontend
+    restart: unless-stopped
     ports:
       - "3000:3000"
     environment:
@@ -32,10 +35,10 @@ services:
     depends_on:
       - backend
     networks:
-      - todo-app-network
+      - todo-network
 
 networks:
-  todo-app-network:
+  todo-network:
     driver: bridge
 
 volumes:
