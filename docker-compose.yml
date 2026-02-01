@@ -10,7 +10,7 @@ services:
       - todo-app-network
 
   backend:
-    build: ./backend
+    image: ghcr.io/Syed-Moazzam/mern-todo-app-devops/backend:latest
     container_name: todo-backend
     ports:
       - "5000:5000"
@@ -23,7 +23,7 @@ services:
       - todo-app-network
 
   frontend:
-    build: ./frontend
+    image: ghcr.io/Syed-Moazzam/mern-todo-app-devops/frontend:latest
     container_name: todo-frontend
     ports:
       - "3000:3000"
