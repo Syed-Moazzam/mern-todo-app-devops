@@ -73,7 +73,9 @@ jobs:
           script: |
             cd ~/mern-todo-app-devops
 
-            export IMAGE_TAG=sha-$(echo ${{ github.sha }} | cut -c1-7)
+            # Generate .env with current image tag
+            echo "IMAGE_TAG=sha-$(echo ${{ github.sha }} | cut -c1-7)" > .env
+
             
             # Login to GHCR
             echo ${{ secrets.GHCR_PAT }} | docker login ghcr.io -u ${{ github.actor }} --password-stdin
