@@ -11,7 +11,7 @@ services:
       - todo-network
 
   backend:
-    image: ghcr.io/syed-moazzam/backend:latest
+    image: ghcr.io/${{ github.repository }}/backend:${IMAGE_TAG}
     container_name: todo-backend
     restart: unless-stopped
     ports:
@@ -25,7 +25,7 @@ services:
       - todo-network
 
   frontend:
-    image: ghcr.io/syed-moazzam/frontend:latest
+    image: ghcr.io/${{ github.repository }}/frontend:${IMAGE_TAG}
     container_name: todo-frontend
     restart: unless-stopped
     ports:

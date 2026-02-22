@@ -31,10 +31,9 @@ jobs:
         id: meta-backend
         uses: docker/metadata-action@v4
         with:
-          images: ${{ env.REGISTRY }}/${{ github.actor }}/backend
+          images: ghcr.io/${{ github.repository }}/backend
           tags: |
-            type=sha,prefix={{branch}}-
-            type=raw,value=latest
+            type=sha
 
       - name: Build and push backend image
         uses: docker/build-push-action@v4
@@ -48,10 +47,9 @@ jobs:
         id: meta-frontend
         uses: docker/metadata-action@v4
         with:
-          images: ${{ env.REGISTRY }}/${{ github.actor }}/frontend
+          images: ghcr.io/${{ github.repository }}/frontend
           tags: |
-            type=sha,prefix={{branch}}-
-            type=raw,value=latest
+            type=sha
 
       - name: Build and push frontend image
         uses: docker/build-push-action@v4
@@ -74,9 +72,11 @@ jobs:
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
             cd ~/mern-todo-app-devops
+
+            export IMAGE_TAG=sha-${{ github.sha }}
             
             # Login to GHCR
-            echo ${{ secrets.GITHUB_TOKEN }} | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+            echo ${{ secrets.GHCR_PAT }} | docker login ghcr.io -u ${{ github.actor }} --password-stdin
             
             # Pull latest code
             git pull origin main
