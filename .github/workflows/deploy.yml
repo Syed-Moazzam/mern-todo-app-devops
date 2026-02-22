@@ -33,7 +33,7 @@ jobs:
         with:
           images: ghcr.io/${{ github.repository }}/backend
           tags: |
-            type=sha
+            type=sha, format=short
 
       - name: Build and push backend image
         uses: docker/build-push-action@v4
@@ -49,7 +49,7 @@ jobs:
         with:
           images: ghcr.io/${{ github.repository }}/frontend
           tags: |
-            type=sha
+            type=sha, format=short
 
       - name: Build and push frontend image
         uses: docker/build-push-action@v4
@@ -73,7 +73,7 @@ jobs:
           script: |
             cd ~/mern-todo-app-devops
 
-            export IMAGE_TAG=sha-${{ github.sha }}
+            IMAGE_TAG=sha-$(echo ${{ github.sha }} | cut -c1-7)
             
             # Login to GHCR
             echo ${{ secrets.GHCR_PAT }} | docker login ghcr.io -u ${{ github.actor }} --password-stdin
