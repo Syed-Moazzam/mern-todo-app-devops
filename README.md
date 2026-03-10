@@ -40,78 +40,81 @@ This project is a production-ready MERN (MongoDB, Express, React, Node.js) todo 
 
 ## 🏗️ Architecture
 
+```mermaid
+graph TB
+    subgraph User["👤 Developer"]
+        Dev[Local Development]
+    end
+    
+    Dev -->|git push| GitHub[GitHub Repository]
+    
+    subgraph CI["⚙️ GitHub Actions CI/CD"]
+        Checkout[1. Checkout Code]
+        Build[2. Build Docker Images]
+        Push[3. Push to GHCR]
+        Deploy[4. SSH & Deploy to EC2]
+        
+        Checkout --> Build --> Push --> Deploy
+    end
+    
+    GitHub --> Checkout
+    
+    subgraph GHCR["📦 GitHub Container Registry"]
+        BackendImg[Backend Image<br/>sha-xxxxx]
+        FrontendImg[Frontend Image<br/>sha-xxxxx]
+    end
+    
+    Push --> GHCR
+    
+    subgraph AWS["☁️ AWS Cloud - ap-south-1"]
+        subgraph Route53["🌐 Route 53"]
+            DNS[buildnship.site<br/>→ 13.235.123.121]
+        end
+        
+        subgraph EC2["🖥️ EC2 Instance - t2.micro Ubuntu 24.04"]
+            subgraph Nginx["🔀 Nginx Reverse Proxy"]
+                SSL[SSL/TLS: Let's Encrypt<br/>Port 80/443]
+            end
+            
+            subgraph Docker["🐳 Docker Compose"]
+                Frontend[Frontend Container<br/>React App<br/>Port 3000]
+                Backend[Backend Container<br/>Express API<br/>Port 5000]
+                MongoDB[MongoDB Container<br/>Database<br/>Port 27017]
+            end
+            
+            Network[Docker Network: todo-network]
+        end
+    end
+    
+    Deploy --> EC2
+    GHCR -.->|Pull Images| Docker
+    
+    DNS --> SSL
+    SSL --> Frontend
+    SSL --> Backend
+    Frontend -.->|API Calls| Backend
+    Backend --> MongoDB
+    
+    Users[🌍 End Users] -->|HTTPS| DNS
+    
+    style Users fill:#667eea,stroke:#333,stroke-width:2px,color:#fff
+    style AWS fill:#FF9900,stroke:#333,stroke-width:2px,color:#000
+    style EC2 fill:#FFA500,stroke:#333,stroke-width:2px
+    style GHCR fill:#2088FF,stroke:#333,stroke-width:2px,color:#fff
+    style CI fill:#2088FF,stroke:#333,stroke-width:2px,color:#fff
+    style Docker fill:#2496ED,stroke:#333,stroke-width:2px,color:#fff
 ```
-┌─────────────────────────────────────────────────────────────────────┐
-│                            DEVELOPER                                │
-│                                                                     │
-│  Local Development → Git Push → GitHub Repository                  │
-└────────────────────────────┬────────────────────────────────────────┘
-                             │
-                             ▼
-┌─────────────────────────────────────────────────────────────────────┐
-│                       GITHUB ACTIONS CI/CD                          │
-│                                                                     │
-│  1. Checkout Code                                                   │
-│  2. Build Docker Images (Backend + Frontend)                        │
-│  3. Push Images to GHCR                                             │
-│  4. SSH to EC2                                                      │
-│  5. Pull Images & Deploy                                            │
-└────────────────────────────┬────────────────────────────────────────┘
-                             │
-                             ▼
-┌─────────────────────────────────────────────────────────────────────┐
-│                    GITHUB CONTAINER REGISTRY                        │
-│                                                                     │
-│  📦 ghcr.io/syed-moazzam/mern-todo-app-devops/backend:sha-xxxxx    │
-│  📦 ghcr.io/syed-moazzam/mern-todo-app-devops/frontend:sha-xxxxx   │
-└────────────────────────────┬────────────────────────────────────────┘
-                             │
-                             ▼
-┌─────────────────────────────────────────────────────────────────────┐
-│                           AWS CLOUD                                 │
-│  ┌───────────────────────────────────────────────────────────────┐ │
-│  │                    Route 53 (DNS)                             │ │
-│  │  buildnship.site → 13.232.201.245                             │ │
-│  └──────────────────────────┬────────────────────────────────────┘ │
-│                             │                                       │
-│                             ▼                                       │
-│  ┌───────────────────────────────────────────────────────────────┐ │
-│  │              EC2 Instance (Ubuntu 24.04)                      │ │
-│  │  Region: ap-south-1 (Mumbai)                                  │ │
-│  │  Type: t2.micro                                               │ │
-│  │                                                               │ │
-│  │  ┌─────────────────────────────────────────────────────────┐ │ │
-│  │  │              NGINX (Reverse Proxy)                      │ │ │
-│  │  │  Port 80/443 → Routes traffic                           │ │ │
-│  │  │  SSL/TLS: Let's Encrypt                                 │ │ │
-│  │  └────────┬──────────────────────────┬───────────────────┘ │ │
-│  │           │                          │                       │ │
-│  │           ▼                          ▼                       │ │
-│  │  ┌─────────────────┐       ┌──────────────────┐            │ │
-│  │  │   Frontend      │       │    Backend       │            │ │
-│  │  │   Container     │       │    Container     │            │ │
-│  │  │   React App     │       │    Express API   │            │ │
-│  │  │   Port: 3000    │◄──────┤    Port: 5000    │            │ │
-│  │  └─────────────────┘       └────────┬─────────┘            │ │
-│  │                                      │                       │ │
-│  │                                      ▼                       │ │
-│  │                            ┌──────────────────┐             │ │
-│  │                            │    MongoDB       │             │ │
-│  │                            │    Container     │             │ │
-│  │                            │    Port: 27017   │             │ │
-│  │                            └──────────────────┘             │ │
-│  │                                                               │ │
-│  │  Docker Network: todo-network (bridge)                       │ │
-│  └───────────────────────────────────────────────────────────────┘ │
-└─────────────────────────────────────────────────────────────────────┘
-                             │
-                             ▼
-┌─────────────────────────────────────────────────────────────────────┐
-│                            END USERS                                │
-│                                                                     │
-│  https://buildnship.site → Secure Access via HTTPS                 │
-└─────────────────────────────────────────────────────────────────────┘
-```
+
+### System Flow
+
+1. **Development** → Developer pushes code to GitHub repository
+2. **CI/CD Trigger** → GitHub Actions workflow automatically starts
+3. **Build Phase** → Docker images built for backend and frontend
+4. **Registry** → Images pushed to GitHub Container Registry with Git SHA tags
+5. **Deployment** → SSH into EC2, pull new images, restart containers
+6. **DNS Resolution** → Route 53 resolves domain to EC2 public IP
+7. **SSL Termination** → Nginx handles HTTPS and routes traffic
+8. **Application** → Frontend serves UI, Backend provides API, MongoDB stores data
 
 ### Data Flow
 
