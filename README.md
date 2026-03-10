@@ -187,25 +187,41 @@ mern-todo-app-devops/
 ├── .github/
 │   └── workflows/
 │       └── deploy.yml          # CI/CD pipeline configuration
+├── assets/
+│   └── app-screenshot.png      # Application screenshot
 ├── backend/
 │   ├── models/
-│   │   └── Todo.js            # Todo schema
+│   │   └── Todo.js             # Todo schema
 │   ├── routes/
-│   │   └── todos.js           # API routes
-│   ├── server.js              # Express server
+│   │   └── todos.js            # API routes
+│   ├── .env                    # Environment variables
+│   ├── server.js               # Express server
 │   ├── package.json
-│   ├── Dockerfile             # Backend container image
-│   └── .dockerignore
+│   ├── package-lock.json
+│   ├── Dockerfile              # Backend container image
 ├── frontend/
-│   ├── src/
-│   │   ├── App.js             # Main React component
-│   │   └── App.css            # Styles
 │   ├── public/
+│   │   ├── favicon.ico
+│   │   ├── index.html
+│   │   ├── logo192.png
+│   │   ├── logo512.png
+│   │   ├── manifest.json
+│   │   └── robots.txt
+│   ├── src/
+│   │   ├── App.js              # Main React component
+│   │   ├── App.css             # Styles
+│   │   ├── App.test.js
+│   │   ├── index.js
+│   │   ├── logo.svg
+│   │   ├── reportWebVitals.js
+│   │   └── setupTests.js
+│   ├── .env                    # Frontend environment variables
 │   ├── package.json
-│   ├── Dockerfile             # Frontend container image
-│   └── .dockerignore
-├── docker-compose.yml         # Multi-container configuration
+│   ├── package-lock.json
+│   ├── Dockerfile              # Frontend container image
+├── .env                        # Docker Compose environment
 ├── .gitignore
+├── docker-compose.yml          # Multi-container configuration
 └── README.md
 ```
 
