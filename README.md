@@ -60,11 +60,15 @@ graph TB
     GitHub --> Checkout
     
     subgraph GHCR["📦 GitHub Container Registry"]
+        direction TB
+        GHCRSpacer[" "]
         BackendImg["Backend Image<br/>sha-xxxxx"]
         FrontendImg["Frontend Image<br/>sha-xxxxx"]
     end
     
     Push --> GHCR
+    
+    style GHCRSpacer fill:none,stroke:none
     
     subgraph AWS["☁️ AWS Cloud - ap-south-1"]
         subgraph Route53["🌐 Route 53"]
