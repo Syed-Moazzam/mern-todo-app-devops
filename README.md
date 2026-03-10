@@ -60,29 +60,29 @@ graph TB
     GitHub --> Checkout
     
     subgraph GHCR["📦 GitHub Container Registry"]
-        BackendImg[Backend Image<br/>sha-xxxxx]
-        FrontendImg[Frontend Image<br/>sha-xxxxx]
+        BackendImg["Backend Image<br/>sha-xxxxx"]
+        FrontendImg["Frontend Image<br/>sha-xxxxx"]
     end
     
     Push --> GHCR
     
     subgraph AWS["☁️ AWS Cloud - ap-south-1"]
         subgraph Route53["🌐 Route 53"]
-            DNS[buildnship.site<br/>→ 13.235.123.121]
+            DNS["buildnship.site<br/>→ 13.235.123.121"]
         end
         
         subgraph EC2["🖥️ EC2 Instance - t2.micro Ubuntu 24.04"]
             subgraph Nginx["🔀 Nginx Reverse Proxy"]
-                SSL[SSL/TLS: Let's Encrypt<br/>Port 80/443]
+                SSL["SSL/TLS: Let's Encrypt<br/>Port 80/443"]
             end
             
             subgraph Docker["🐳 Docker Compose"]
-                Frontend[Frontend Container<br/>React App<br/>Port 3000]
-                Backend[Backend Container<br/>Express API<br/>Port 5000]
-                MongoDB[MongoDB Container<br/>Database<br/>Port 27017]
+                Frontend["Frontend Container<br/>React App<br/>Port 3000"]
+                Backend["Backend Container<br/>Express API<br/>Port 5000"]
+                MongoDB["MongoDB Container<br/>Database<br/>Port 27017"]
             end
             
-            Network[Docker Network: todo-network]
+            Network["Docker Network: todo-network"]
         end
     end
     
@@ -95,7 +95,7 @@ graph TB
     Frontend -.->|API Calls| Backend
     Backend --> MongoDB
     
-    Users[🌍 End Users] -->|HTTPS| DNS
+    Users["🌍 End Users"] -->|HTTPS| DNS
     
     style Users fill:#667eea,stroke:#333,stroke-width:2px,color:#fff
     style AWS fill:#FF9900,stroke:#333,stroke-width:2px,color:#000
