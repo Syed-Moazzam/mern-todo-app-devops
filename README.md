@@ -59,23 +59,19 @@ graph TB
     
     GitHub --> Checkout
     
-    subgraph GHCR["📦 GitHub Container Registry"]
-        direction TB
-        GHCRSpacer[" "]
+    subgraph GHCR["📦 GHCR"]
         BackendImg["Backend Image<br/>sha-xxxxx"]
         FrontendImg["Frontend Image<br/>sha-xxxxx"]
     end
     
     Push --> GHCR
     
-    style GHCRSpacer fill:none,stroke:none
-    
     subgraph AWS["☁️ AWS Cloud - ap-south-1"]
         subgraph Route53["🌐 Route 53"]
             DNS["buildnship.site<br/>→ 13.235.123.121"]
         end
         
-        subgraph EC2["🖥️ EC2 Instance - t2.micro Ubuntu 24.04"]
+        subgraph EC2["🖥️ EC2 Instance - t2.micro - Ubuntu 24.04"]
             subgraph Nginx["🔀 Nginx Reverse Proxy"]
                 SSL["SSL/TLS: Let's Encrypt<br/>Port 80/443"]
             end
