@@ -59,7 +59,7 @@ function App() {
 
   return (
     <div className="App">
-      <h1 className='main-heading'>My First DevOps Hands-On Projectt</h1>
+      <h1 className='main-heading'>My First DevOps Hands-On Project</h1>
       <div className="container">
         <h1>📝 Todo App</h1>
         <form onSubmit={addTodo} className="todo-form">
